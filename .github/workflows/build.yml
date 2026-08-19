@@ -27,9 +27,18 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Build APK
-        working-directory: project
+       - name: Build APK
         run: |
+          PROJECT_DIR=$(find project -name settings.gradle -type f -printf '%h\n' | head -1)
+
+          if [ -z "$PROJECT_DIR" ]; then
+            echo "HIBA: settings.gradle nem található!"
+            find project -maxdepth 6 -print
+            exit 1
+          fi
+
+          echo "Android projekt helye: $PROJECT_DIR"
+          cd "$PROJECT_DIR"
           gradle assembleDebug
 
       - name: Upload APK
