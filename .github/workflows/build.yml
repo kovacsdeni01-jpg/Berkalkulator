@@ -13,7 +13,7 @@ jobs:
 
       - name: Extract project ZIP
         run: |
-          unzip -o BerkalkulatorAndroid_project.zip -d project
+          unzip -o BerkalkulatorAndroid_projekt.zip -d projekt
           find project -maxdepth 3 -type f | head -100
 
       - name: Set up JDK
