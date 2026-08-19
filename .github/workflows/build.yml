@@ -27,7 +27,7 @@ jobs:
         with:
           gradle-version: '8.7'
 
-       - name: Build APK
+      - name: Build APK
         run: |
           PROJECT_DIR=$(find project -name settings.gradle -type f -printf '%h\n' | head -1)
 
