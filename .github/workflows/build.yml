@@ -11,20 +11,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract project ZIP
-        run: |
-          unzip -o BerKalkulatorAndroid_projekt.zip -d projekt
-          find project -maxdepth 3 -type f | head -100
-
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Build APK
-        working-directory: project
+      - name: Extract project
         run: |
+          mkdir project
+          unzip -o BerKalkulatorAndroid_projekt.zip -d projekt
+          echo "Kicsomagolt fájlok:"
+          find project -maxdepth 4 -type f | head -100
+
+      - name: Find and build Android project
+        run: |
+          GRADLEW=$(find project -name gradlew -type f | head -1)
+
+          if [ -z "$GRADLEW" ]; then
+            echo "HIBA: gradlew nem található!"
+            echo "A ZIP tartalma:"
+            find project -maxdepth 5 -print
+            exit 1
+          fi
+
+          PROJECT_DIR=$(dirname "$GRADLEW")
+          echo "Projekt mappa: $PROJECT_DIR"
+
+          cd "$PROJECT_DIR"
           chmod +x gradlew
           ./gradlew assembleDebug
 
